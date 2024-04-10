@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 
+//log all requests with morgan
 app.use(morgan("common"));
 
 let topMovies = [
@@ -33,8 +34,6 @@ app.get("/", (req, res) => {
   res.send("Welcome to my app :)");
 });
 
-//log all requests with morgan
-
 app.get("/secreturl", (req, res) => {
   res.send("This is a secret url with super top-secret content.");
 });
@@ -47,6 +46,11 @@ app.get("/secreturl", (req, res) => {
 
 // serving static files
 app.use(express.static("public"));
+
+// handling error
+app.use((error, request, response, next) => {
+  console.log("ERR: ", error.stack);
+});
 
 app.listen(8080, () => {
   console.log("Your app is listening on port 8080.");
