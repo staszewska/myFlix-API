@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>myFlix API</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <h1>myFlix API Documentation</h1>
@@ -20,5 +21,94 @@
       application or a movie enthusiast exploring the vast world of cinema, this
       documentation will guide you through utilizing the myFlix API effectively.
     </p>
+
+    <h2>API Endpoint Documentation</h2>
+
+    <table>
+      <tr>
+        <th>Request Method</th>
+        <th>Endpoint URL</th>
+        <th>Description</th>
+        <th>Query Parameters</th>
+        <th>Request Body</th>
+        <th>Response</th>
+      </tr>
+      <tr>
+        <td>GET</td>
+        <td>/movies</td>
+        <td>Returns a list of all movies</td>
+        <td>N/A</td>
+        <td>N/A</td>
+        <td>List of movie objects</td>
+      </tr>
+      <tr>
+        <td>GET</td>
+        <td>/movies/:title</td>
+        <td>Returns data about a single movie by title</td>
+        <td>:title - The title of the movie</td>
+        <td>N/A</td>
+        <td>Single movie object</td>
+      </tr>
+      <tr>
+        <td>GET</td>
+        <td>/movies/genre/:genreName</td>
+        <td>Returns data about a genre by name/title</td>
+        <td>:genreName - The name/title of the genre</td>
+        <td>N/A</td>
+        <td>Genre object</td>
+      </tr>
+      <tr>
+        <td>GET</td>
+        <td>/movies/directors/:directorName</td>
+        <td>Returns data about a director</td>
+        <td>:directorName - The name of the director</td>
+        <td>N/A</td>
+        <td>Director object</td>
+      </tr>
+      <tr>
+        <td>POST</td>
+        <td>/users</td>
+        <td>Allows registration of a new user</td>
+        <td>N/A</td>
+        <td>{ "name": "John Doe" }</td>
+        <td>Newly created user object</td>
+      </tr>
+      <tr>
+        <td>POST</td>
+        <td>/users/:id/:movieTitle</td>
+        <td>Updates user's favorite movie</td>
+        <td>
+          :id - The ID of the user<br />:movieTitle - The title of the movie
+        </td>
+        <td>N/A</td>
+        <td>Success message</td>
+      </tr>
+      <tr>
+        <td>PUT</td>
+        <td>/users/:id</td>
+        <td>Allows users to update their info</td>
+        <td>:id - The ID of the user</td>
+        <td>{ "name": "Updated Name" }</td>
+        <td>Updated user object</td>
+      </tr>
+      <tr>
+        <td>DELETE</td>
+        <td>/users/:id/:movieTitle</td>
+        <td>Removes a movie from user's favorites</td>
+        <td>
+          :id - The ID of the user<br />:movieTitle - The title of the movie
+        </td>
+        <td>N/A</td>
+        <td>Success message</td>
+      </tr>
+      <tr>
+        <td>DELETE</td>
+        <td>/users/:id</td>
+        <td>Allows existing users to deregister</td>
+        <td>:id - The ID of the user</td>
+        <td>N/A</td>
+        <td>Success message</td>
+      </tr>
+    </table>
   </body>
 </html>
