@@ -4,6 +4,12 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const uuid = require("uuid");
 
+const mongoose = required("mongoose");
+const Models = require("./models.js");
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
 //for every incoming request, if it contains JSON data in the body, parse that JSON data
 app.use(bodyParser.json());
 
