@@ -108,8 +108,14 @@ let users = [
 // GET request (READ)
 
 //Return a list of ALL movies to the user
-app.get("/movies", (request, response) => {
-  response.status(200).json(topMovies);
+app.get("/movies", async (request, response) => {
+  await Movies.find()
+    .then((movies) => {
+      response.status(201).json(movies);
+    })
+    .catch((error) => {
+      response.status(500).send("Error: " + error);
+    });
 });
 
 //Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user
