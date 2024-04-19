@@ -4,11 +4,16 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const uuid = require("uuid");
 
-const mongoose = required("mongoose");
+const mongoose = require("mongoose");
 const Models = require("./models.js");
 
 const Movies = Models.Movie;
 const Users = Models.User;
+
+mongoose.connect("mongodb://localhost:27017/cfDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 //for every incoming request, if it contains JSON data in the body, parse that JSON data
 app.use(bodyParser.json());
