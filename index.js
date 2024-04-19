@@ -119,14 +119,15 @@ app.get("/movies", async (request, response) => {
 });
 
 //Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user
-app.get("/movies/:title", (request, response) => {
-  const { title } = request.params;
-  const movie = topMovies.find((movie) => movie.title === title);
-  if (movie) {
-    response.status(200).json(movie);
-  } else {
-    response.status(400).send("Movie not found");
-  }
+app.get("/movies/:title", async (request, response) => {
+  console.log("Title is: ", request.params.title);
+  await Movies.findOne({ Title: request.params.title })
+    .then((movie) => {
+      response.json(movie);
+    })
+    .catch((error) => {
+      response.status(500).send("Error: " + error);
+    });
 });
 
 //Return data about a genre (description) by name/title
