@@ -244,17 +244,21 @@ app.delete("/users/:id/:movieTitle", (request, response) => {
 });
 
 //Allow existing users to deregister
-app.delete("/users/:id", (request, response) => {
-  const { id } = request.params;
+app.delete("/users/:name", async (request, response) => {
+  console.log("Name is: ", request.params.name);
+  await Users.findOneAndDelete({ Name: request.params.name })
 
-  let user = users.find((user) => user.id == id);
+    .then((user) => {
+      if (!user) {
+        response.status(400).send(request.params.name + " was not found");
+      } else {
+        response.status(200).send(request.params.name + " was deleted");
+      }
+    })
 
-  if (user) {
-    users = users.filter((user) => user.id != id);
-    response.status(200).json(`user ${id} has been deleted`);
-  } else {
-    response.status(400).send("User not found");
-  }
+    .catch((error) => {
+      response.status(500).send("Error: ", error);
+    });
 });
 
 // This works but we can also use express.static to serve static files
