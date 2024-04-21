@@ -120,7 +120,7 @@ app.get("/movies", async (request, response) => {
 
 //Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user
 app.get("/movies/:title", async (request, response) => {
-  console.log("Title is: ", request.params.title);
+  // console.log("Title is: ", request.params.title);
   await Movies.findOne({ Title: request.params.title })
     .then((movie) => {
       response.json(movie);
@@ -131,19 +131,18 @@ app.get("/movies/:title", async (request, response) => {
 });
 
 //Return data about a genre (description) by name/title
-app.get("/movies/genre/:genreName", (request, response) => {
-  const { genreName } = request.params;
-  // console.log(genreName);
-  const genre = topMovies.find((movie) => {
-    return movie.genre.name.includes(genreName);
-  }).genre;
-  // console.log(genre);
+app.get("/movies/genre/:genreName", async (request, response) => {
+  const genreName = request.params.genreName;
 
-  if (genre) {
-    response.status(200).json(genre);
-  } else {
-    response.status(400).send("No such a genre");
-  }
+  await Movies.findOne({ "Genre.Name": genreName })
+
+    .then((movie) => {
+      response.json(movie.Genre);
+    })
+
+    .catch((error) => {
+      response.status(500).send("Error: " + error);
+    });
 });
 
 //Return data about a director
