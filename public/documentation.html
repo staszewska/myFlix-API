@@ -47,7 +47,7 @@
         <td>Returns data about a single movie by title</td>
         <td>:title - The title of the movie</td>
         <td>N/A</td>
-        <td>Single movie object</td>
+        <td>Single movie object in JSON format</td>
       </tr>
       <tr>
         <td>GET</td>
@@ -55,7 +55,16 @@
         <td>Returns data about a genre by name/title</td>
         <td>:genreName - The name/title of the genre</td>
         <td>N/A</td>
-        <td>Genre object (Name and Description)</td>
+        <td>
+          Genre object in JSON Format
+          <pre>
+            Example:
+            {
+              "Name": "Sci-Fi",
+              "Description": "Science fiction film is a genre that uses speculative, fictional science-based depictions of phenomena."
+          }
+          </pre>
+        </td>
       </tr>
       <tr>
         <td>GET</td>
@@ -63,49 +72,84 @@
         <td>Returns data about a director</td>
         <td>:directorName - The name of the director</td>
         <td>N/A</td>
-        <td>Director object</td>
+        <td>
+          Director object in JSON Format
+          <pre>
+            Example:
+            {
+              "Name": "James Cameron",
+              "Bio": "James Cameron is a Canadian film director, producer, and screenwriter.",
+              "Birth": "1954"
+          }
+          </pre>
+        </td>
       </tr>
       <tr>
         <td>POST</td>
         <td>/users</td>
         <td>Allows registration of a new user</td>
         <td>N/A</td>
-        <td>{ "name": "John Doe" }</td>
-        <td>Newly created user object</td>
-      </tr>
-      <tr>
-        <td>POST</td>
-        <td>/users/:id/:movieTitle</td>
-        <td>Updates user's favorite movie</td>
         <td>
-          :id - The ID of the user<br />:movieTitle - The title of the movie
+          Example:
+          <pre>
+          { "Name": "Mary7", 
+          "Password": "123", 
+          "Email": "mary@example.com",
+          "Birthday": "1993-05-20", 
+          "Country": "Germany", 
+          "Gender": "Female" }
+
+          JSON Format
+        </pre
+          >
         </td>
-        <td>N/A</td>
-        <td>Success message</td>
+        <td>
+          Newly created user object in JSON format
+          <pre>
+Example: 
+          { "Name": "Mary7",
+          "Password": "123", 
+          "Email": "mary@example.com", 
+          "Birthday": "1993-05-20T00:00:00.000Z", 
+          "Country": "Germany", 
+          "Gender": "Female",
+          "favoriteMovies": [], 
+          "_id": "6625510f71a360384d5b806c", "__v": 0 }
+        </pre
+          >
+        </td>
       </tr>
       <tr>
         <td>PUT</td>
-        <td>/users/:id</td>
+        <td>/users/:name/movies/:movieID</td>
+        <td>Updates user's favorite movie</td>
+        <td>:name - The ID of the user<br />:movieID - The ID of the movie</td>
+        <td>N/A</td>
+        <td>Updated user object in JSON Format</td>
+      </tr>
+      <tr>
+        <td>PUT</td>
+        <td>/users/:name</td>
         <td>Allows users to update their info</td>
-        <td>:id - The ID of the user</td>
+        <td>:name - The name of the user</td>
         <td>{ "name": "Updated Name" }</td>
-        <td>Updated user object</td>
+        <td>Updated user object in JSON Format</td>
       </tr>
       <tr>
         <td>DELETE</td>
-        <td>/users/:id/:movieTitle</td>
+        <td>/users/:name/movies/:movieID</td>
         <td>Removes a movie from user's favorites</td>
         <td>
-          :id - The ID of the user<br />:movieTitle - The title of the movie
+          :name - The name of the user<br />:movieID - The id of the movie
         </td>
         <td>N/A</td>
-        <td>Success message</td>
+        <td>Updated user object in JSON Format</td>
       </tr>
       <tr>
         <td>DELETE</td>
-        <td>/users/:id</td>
+        <td>/users/:name</td>
         <td>Allows existing users to deregister</td>
-        <td>:id - The ID of the user</td>
+        <td>:name - The name of the user</td>
         <td>N/A</td>
         <td>Success message</td>
       </tr>
