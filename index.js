@@ -219,7 +219,7 @@ app.put("/users/:name", async (request, response) => {
     });
 });
 
-// update users favourite movie
+// update users favorite movie
 app.put("/users/:name/movies/:movieID", async (request, response) => {
   await Users.findOneAndUpdate(
     { Name: request.params.name },
