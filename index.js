@@ -176,35 +176,51 @@ app.post("/users", (request, response) => {
   }
 });
 
-// update users favourite movie
-app.post("/users/:id/:movieTitle", (request, response) => {
-  const { id, movieTitle } = request.params;
-
-  let user = users.find((user) => user.id == id);
-
-  if (user) {
-    user.favoriteMovies.push(movieTitle);
-    response.status(200).json("Movie title has been added");
-  } else {
-    response.status(400).send("User not found");
-  }
-});
-
 //PUT requests (UPDATE)
 
 //Allow users to update their user info
-app.put("/users/:id", (request, response) => {
-  const { id } = request.params;
-  const updatedUser = request.body;
+app.put("/users/:name", async (request, response) => {
+  console.log("User name:", request.params.name);
+  await Users.findOneAndUpdate(
+    { Name: request.params.name },
 
-  let user = users.find((user) => user.id == id);
+    {
+      $set: {
+        Name: request.body.Name,
+        Email: request.body.Email,
+        Birthday: request.body.Birthday,
+        Country: request.body.Country,
+        Gender: request.body.Gender,
+      },
+    },
+    { new: true }
+  )
 
-  if (user) {
-    user.name = updatedUser.name;
-    response.status(200).json(user);
-  } else {
-    response.status(400).send("User not found");
-  }
+    .then((updatedUser) => {
+      response.json(updatedUser);
+    })
+    .catch((error) => {
+      response(500).send("Error: ", error);
+    });
+});
+
+// update users favourite movie
+app.put("/users/:name/movies/:movieID", async (request, response) => {
+  await Users.findOneAndUpdate(
+    { Name: request.params.name },
+    {
+      $push: { favoriteMovies: request.params.movieID },
+    },
+    { new: true }
+  )
+
+    .then((updatedUser) => {
+      response.json(updatedUser);
+    })
+
+    .catch((error) => {
+      response.status(500).send("Error: ", error);
+    });
 });
 
 //DELETE requests
