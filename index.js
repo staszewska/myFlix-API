@@ -163,17 +163,32 @@ app.get("/movies/directors/:directorName", async (request, response) => {
 //POST requests (CREATE)
 
 //Allow new users to register
-app.post("/users", (request, response) => {
-  const newUser = request.body;
-  console.log(newUser);
-
-  if (newUser.name) {
-    newUser.id = uuid.v4();
-    users.push(newUser);
-    response.status(201).json(newUser);
-  } else {
-    response.status(400).send("Users needs names");
-  }
+app.post("/users", async (request, response) => {
+  await Users.findOne({ Name: request.params.name })
+    .then((user) => {
+      if (user) {
+        return response.status(400).send(request.body.name + "already exists");
+      } else {
+        Users.create({
+          Name: request.body.Name,
+          Password: request.body.Password,
+          Email: request.body.Email,
+          Birthday: new Date(request.body.Birthday),
+          Country: request.body.Country,
+          Gender: request.body.Gender,
+        })
+          .then((user) => {
+            console.log("success");
+            response.status(200).json(user);
+          })
+          .catch((error) => {
+            response.status(500).send("Error: ", error);
+          });
+      }
+    })
+    .catch((error) => {
+      response.status(500).send("Error: ", error);
+    });
 });
 
 //PUT requests (UPDATE)
