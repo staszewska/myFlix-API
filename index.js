@@ -146,15 +146,18 @@ app.get("/movies/genre/:genreName", async (request, response) => {
 });
 
 //Return data about a director
-app.get("/movies/directors/:directorName", (request, response) => {
-  const { directorName } = request.params;
-  const movie = topMovies.find((movie) => movie.director.name === directorName);
+app.get("/movies/directors/:directorName", async (request, response) => {
+  const directorName = request.params.directorName;
 
-  if (movie) {
-    response.status(200).json(movie.director);
-  } else {
-    response.status(400).send("No such a director");
-  }
+  await Movies.findOne({ "Director.Name": directorName })
+
+    .then((movie) => {
+      response.json(movie.Director);
+    })
+
+    .catch((error) => {
+      response.status(500).send("Error: ", error);
+    });
 });
 
 //POST requests (CREATE)
