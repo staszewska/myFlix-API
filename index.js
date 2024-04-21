@@ -226,21 +226,22 @@ app.put("/users/:name/movies/:movieID", async (request, response) => {
 //DELETE requests
 
 //Allow users to remove a movie from their list of favorites
-app.delete("/users/:id/:movieTitle", (request, response) => {
-  const { id, movieTitle } = request.params;
+app.delete("/users/:name/movies/:movieID", async (request, response) => {
+  await Users.findOneAndUpdate(
+    { Name: request.params.name },
+    {
+      $pull: { favoriteMovies: request.params.movieID },
+    },
+    { new: true }
+  )
 
-  let user = users.find((user) => user.id == id);
+    .then((updatedUser) => {
+      response.json(updatedUser);
+    })
 
-  if (user) {
-    user.favoriteMovies = user.favoriteMovies.filter(
-      (title) => title !== movieTitle
-    );
-    response
-      .status(200)
-      .json(`${movieTitle} has been removed from user ${id} array`);
-  } else {
-    response.status(400).send("User not found");
-  }
+    .catch((error) => {
+      response.status(500).send("Error: ", error);
+    });
 });
 
 //Allow existing users to deregister
