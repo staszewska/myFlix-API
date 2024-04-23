@@ -18,6 +18,13 @@ mongoose.connect("mongodb://localhost:27017/cfDB", {
 //for every incoming request, if it contains JSON data in the body, parse that JSON data
 app.use(bodyParser.json());
 
+//import auth.js
+let auth = require("./auth")(app);
+
+//require Passport module and import passport.js file
+const passport = require("passport");
+require("./passport");
+
 //log all requests with morgan
 app.use(morgan("common"));
 
