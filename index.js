@@ -180,7 +180,7 @@ app.get(
       })
 
       .catch((error) => {
-        response.status(500).send("Error: ", error);
+        response.status(500).send("Error: " + error);
       });
   }
 );
@@ -207,12 +207,12 @@ app.post("/users", async (request, response) => {
             response.status(200).json(user);
           })
           .catch((error) => {
-            response.status(500).send("Error: ", error);
+            response.status(500).send("Error: " + error);
           });
       }
     })
     .catch((error) => {
-      response.status(500).send("Error: ", error);
+      response.status(500).send("Error: " + error);
     });
 });
 
@@ -251,7 +251,7 @@ app.put(
         response.json(updatedUser);
       })
       .catch((error) => {
-        response(500).send("Error: ", error);
+        response(500).send("Error: " + error);
       });
   }
 );
@@ -280,7 +280,7 @@ app.put(
       })
 
       .catch((error) => {
-        response.status(500).send("Error: ", error);
+        response.status(500).send("Error: " + error);
       });
   }
 );
@@ -310,7 +310,7 @@ app.delete(
       })
 
       .catch((error) => {
-        response.status(500).send("Error: ", error);
+        response.status(500).send("Error: " + error);
       });
   }
 );
@@ -337,7 +337,7 @@ app.delete(
       })
 
       .catch((error) => {
-        response.status(500).send("Error: ", error);
+        response.status(500).send("Error: " + error);
       });
   }
 );
@@ -353,7 +353,7 @@ app.use(express.static("public"));
 
 // handling error
 app.use((error, request, response, next) => {
-  console.log("ERR: ", error.stack);
+  console.log("ERR: " + error.stack);
 });
 
 app.listen(8080, () => {
