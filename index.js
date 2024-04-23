@@ -17,6 +17,7 @@ mongoose.connect("mongodb://localhost:27017/cfDB", {
 
 //for every incoming request, if it contains JSON data in the body, parse that JSON data
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //import auth.js
 let auth = require("./auth")(app);
