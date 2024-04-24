@@ -109,6 +109,7 @@ app.get(
 
 //Allow new users to register
 app.post("/users", async (request, response) => {
+  let hashedPassword = Users.hashPassword(req.body.Password);
   await Users.findOne({ Name: request.params.name })
     .then((user) => {
       if (user) {
