@@ -19,6 +19,10 @@ mongoose.connect("mongodb://localhost:27017/cfDB", {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//app uses cors; it will set the application to allow requests from all origins;
+const cors = require("cors");
+app.use(cors());
+
 //import auth.js
 let auth = require("./auth")(app);
 
