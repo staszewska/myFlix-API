@@ -3,6 +3,7 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const uuid = require("uuid");
+const { check, validationResult } = require("express-validator");
 
 const mongoose = require("mongoose");
 const Models = require("./models.js");
@@ -108,42 +109,80 @@ app.get(
 //POST requests (CREATE)
 
 //Allow new users to register
-app.post("/users", async (request, response) => {
-  let hashedPassword = Users.hashPassword(request.body.Password);
-  await Users.findOne({ Name: request.params.name })
-    .then((user) => {
-      if (user) {
-        return response.status(400).send(request.body.name + "already exists");
-      } else {
-        Users.create({
-          Name: request.body.Name,
-          Password: hashedPassword,
-          Email: request.body.Email,
-          Birthday: new Date(request.body.Birthday),
-          Country: request.body.Country,
-          Gender: request.body.Gender,
-        })
-          .then((user) => {
-            console.log("success");
-            response.status(200).json(user);
+app.post(
+  "/users",
+  //validation
+  check("Name", "Name is required").isLength({ min: 5 }),
+  [
+    check(
+      "Name",
+      "Name contains non alphanumeric characters - not allowed."
+    ).isAlphanumeric(),
+    check("Password", "Password is required").not().isEmpty(),
+    check("Email", "Email does not appear to be valid").isEmail(),
+  ],
+  async (request, response) => {
+    // check the validation object for errors
+    let errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+      return response.status(422).json({ errors: errors.array() });
+    }
+
+    let hashedPassword = Users.hashPassword(request.body.Password);
+    await Users.findOne({ Name: request.params.name })
+      .then((user) => {
+        if (user) {
+          return response
+            .status(400)
+            .send(request.body.name + "already exists");
+        } else {
+          Users.create({
+            Name: request.body.Name,
+            Password: hashedPassword,
+            Email: request.body.Email,
+            Birthday: new Date(request.body.Birthday),
+            Country: request.body.Country,
+            Gender: request.body.Gender,
           })
-          .catch((error) => {
-            response.status(500).send("Error: " + error);
-          });
-      }
-    })
-    .catch((error) => {
-      response.status(500).send("Error: " + error);
-    });
-});
+            .then((user) => {
+              console.log("success");
+              response.status(200).json(user);
+            })
+            .catch((error) => {
+              response.status(500).send("Error: " + error);
+            });
+        }
+      })
+      .catch((error) => {
+        response.status(500).send("Error: " + error);
+      });
+  }
+);
 
 //PUT requests (UPDATE)
 
 //Allow users to update their user info
 app.put(
   "/users/:name",
+  //validation
+  check("Name", "Name is required").isLength({ min: 5 }),
+  [
+    check(
+      "Name",
+      "Name contains non alphanumeric characters - not allowed."
+    ).isAlphanumeric(),
+    check("Password", "Password is required").not().isEmpty(),
+    check("Email", "Email does not appear to be valid").isEmail(),
+  ],
   passport.authenticate("jwt", { session: false }),
   async (request, response) => {
+    // check the validation object for errors
+    let errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+      return response.status(422).json({ errors: errors.array() });
+    }
     console.log("request.user.Name", request.user.Name);
     console.log("request.params.name", request.params.name);
 
