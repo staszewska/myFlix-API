@@ -41,7 +41,7 @@ require("./passport");
 app.use(morgan("common"));
 
 app.get("/", async (request, response) => {
-  response.send("Hello world");
+  response.send("Welcome to myFlix API");
 });
 
 // GET request (READ)
