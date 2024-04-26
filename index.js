@@ -316,6 +316,9 @@ app.use((error, request, response, next) => {
   console.log("ERR: " + error.stack);
 });
 
-app.listen(8080, () => {
-  console.log("Your app is listening on port 8080.");
+console.log(process.env.PORT);
+
+const port = process.env.PORT || 8080;
+app.listen(port, "0.0.0.0", () => {
+  console.log("Listening on Port " + port);
 });
