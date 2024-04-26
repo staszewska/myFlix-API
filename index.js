@@ -40,6 +40,10 @@ require("./passport");
 //log all requests with morgan
 app.use(morgan("common"));
 
+app.get("/", async (request, response) => {
+  response.send("Hello world");
+});
+
 // GET request (READ)
 
 //Return a list of ALL movies to the user
