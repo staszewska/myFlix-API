@@ -118,6 +118,39 @@ app.get(
   }
 );
 
+//GET USER
+
+app.get(
+  "/users/:userId",
+  passport.authenticate("jwt", { session: false }),
+  async (request, response) => {
+    const userId = request.params.userId;
+    console.log(userId);
+
+    try {
+      const user = await Users.findOne({ _id: userId });
+      response.json(user);
+    } catch (error) {
+      response.status(500).send("Error: " + error);
+    }
+  }
+);
+
+// app.get(
+//   "/users/:userId",
+//   passport.authenticate("jwt", { session: false }),
+//   (request, response) => {
+//     console.log("ID is: ", request.params.userId);
+//     Users.findOne({ _id: request.params.userId })
+//       .then((user) => {
+//         response.json(user);
+//       })
+//       .catch((error) => {
+//         response.status(500).send("Error: " + error);
+//       });
+//   }
+// );
+
 //POST requests (CREATE)
 
 //Allow new users to register
