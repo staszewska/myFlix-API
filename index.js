@@ -325,12 +325,12 @@ app.delete(
   passport.authenticate("jwt", { session: false }),
   async (request, response) => {
     // CONDITION TO CHECK ADDED HERE
-    if (request.user.Name !== request.params.name) {
+    if (request.user.id !== request.body._id) {
       return response.status(400).send("Permission denied");
     }
 
     console.log("Name is: ", request.params.name);
-    await Users.findOneAndDelete({ Name: request.params.name })
+    await Users.findOneAndDelete({ _id: request.body._id })
 
       .then((user) => {
         if (!user) {
