@@ -232,32 +232,31 @@ app.put(
     console.log("request.params.name", request.params.name);
 
     // CONDITION TO CHECK ADDED HERE
-    if (request.user.Name !== request.params.name) {
+    if (request.user.id !== request.body._id) {
       return response.status(400).send("Permission denied");
     }
 
     // CONDITION ENDS
-    await Users.findOneAndUpdate(
-      { Name: request.params.name },
-
-      {
-        $set: {
-          Name: request.body.Name,
-          Email: request.body.Email,
-          Birthday: request.body.Birthday,
-          Country: request.body.Country,
-          Gender: request.body.Gender,
+    try {
+      const updatedUser = await Users.findOneAndUpdate(
+        { _id: request.body._id },
+        {
+          $set: {
+            Name: request.body.Name,
+            Email: request.body.Email,
+            Birthday: request.body.Birthday,
+            Country: request.body.Country,
+            Gender: request.body.Gender,
+          },
         },
-      },
-      { new: true }
-    )
+        { new: true }
+      );
 
-      .then((updatedUser) => {
-        response.json(updatedUser);
-      })
-      .catch((error) => {
-        response(500).send("Error: " + error);
-      });
+      console.log("updated", updatedUser);
+      response.json(updatedUser);
+    } catch (error) {
+      response(500).send("Error: " + error);
+    }
   }
 );
 
