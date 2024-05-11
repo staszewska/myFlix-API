@@ -24,13 +24,13 @@ mongoose.connect(process.env.CONNECTION_URI, {
   useUnifiedTopology: true,
 });
 
-//for every incoming request, if it contains JSON data in the body, parse that JSON data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 //app uses cors; it will set the application to allow requests from all origins;
 const cors = require("cors");
 app.use(cors());
+
+//for every incoming request, if it contains JSON data in the body, parse that JSON data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //import auth.js
 let auth = require("./auth")(app);
