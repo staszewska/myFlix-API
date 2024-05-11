@@ -270,20 +270,6 @@ app.put(
       return response.status(400).send("Permission denied");
     }
 
-    const user = await Users.findOne({ Name: request.params.name });
-
-    const isMovieIdExisted = user.favoriteMovies.includes(
-      request.params.movieID
-    );
-    console.log(
-      "[Update user favorite movie] isMovieExisted:",
-      isMovieIdExisted
-    );
-
-    if (!isMovieIdExisted) {
-      return response.statusCode(200);
-    }
-
     await Users.findOneAndUpdate(
       { Name: request.params.name },
 
