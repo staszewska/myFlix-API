@@ -217,11 +217,11 @@ app.put(
       "Name",
       "Name contains non alphanumeric characters - not allowed."
     ).isAlphanumeric(),
-    check("Password", "Password is required").not().isEmpty(),
+    // check("Password", "Password is required").not().isEmpty(),
     check("Email", "Email does not appear to be valid").isEmail(),
   ],
   passport.authenticate("jwt", { session: false }),
-  async (request, response) => {
+  async function (request, response) {
     // check the validation object for errors
     let errors = validationResult(request);
 
@@ -237,12 +237,15 @@ app.put(
     }
 
     // CONDITION ENDS
+    const hashedPassword = Users.hashPassword(request.body.Password);
+
     try {
       const updatedUser = await Users.findOneAndUpdate(
         { _id: request.body._id },
         {
           $set: {
             Name: request.body.Name,
+            Password: hashedPassword,
             Email: request.body.Email,
             Birthday: request.body.Birthday,
             Country: request.body.Country,
