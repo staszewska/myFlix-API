@@ -26,7 +26,24 @@ mongoose.connect(process.env.CONNECTION_URI, {
 
 //app uses cors; it will set the application to allow requests from all origins;
 const cors = require("cors");
-app.use(cors());
+const cors = require("cors");
+let allowedOrigins = ["https://myflixms.netlify.app"];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        // If a specific origin isn’t found on the list of allowed origins
+        let message =
+          "The CORS policy for this application doesn’t allow access from origin " +
+          origin;
+        return callback(new Error(message), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
 
 //for every incoming request, if it contains JSON data in the body, parse that JSON data
 app.use(bodyParser.json());
