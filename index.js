@@ -167,6 +167,8 @@ app.post(
     check("Email", "Email does not appear to be valid").isEmail(),
   ],
   async (request, response) => {
+    console.log("[POST/users] Creating new user");
+
     // check the validation object for errors
     let errors = validationResult(request);
 
@@ -222,6 +224,8 @@ app.put(
   ],
   passport.authenticate("jwt", { session: false }),
   async function (request, response) {
+    console.log("[POST/users/:name] Updating user profile");
+
     // check the validation object for errors
     let errors = validationResult(request);
 
@@ -237,10 +241,30 @@ app.put(
     }
 
     // CONDITION ENDS
-    const hashedPassword = Users.hashPassword(request.body.Password);
+    // Handle password sent from user
+    let hashedPassword;
+    let updatedUser;
 
-    try {
-      const updatedUser = await Users.findOneAndUpdate(
+    if (!request.body.Password) {
+      updatedUser = await Users.findOneAndUpdate(
+        { _id: request.body._id },
+        {
+          $set: {
+            Name: request.body.Name,
+            Email: request.body.Email,
+            Birthday: request.body.Birthday,
+            Country: request.body.Country,
+            Gender: request.body.Gender,
+          },
+        },
+        { new: true }
+      );
+
+      console.log("updated", updatedUser);
+    } else {
+      hashedPassword = Users.hashPassword(request.body.Password);
+
+      updatedUser = await Users.findOneAndUpdate(
         { _id: request.body._id },
         {
           $set: {
@@ -256,10 +280,11 @@ app.put(
       );
 
       console.log("updated", updatedUser);
-      response.json(updatedUser);
-    } catch (error) {
-      response(500).send("Error: " + error);
     }
+
+    const updatedUserWithoutPassword = { ...updatedUser._doc };
+    delete updatedUserWithoutPassword.Password;
+    response.json(updatedUserWithoutPassword);
   }
 );
 
@@ -268,6 +293,8 @@ app.put(
   "/users/:name/movies/:movieID",
   passport.authenticate("jwt", { session: false }),
   async (request, response) => {
+    console.log("[PUT.../movies/:movieID] Updating user's favorite movies");
+
     // CONDITION TO CHECK ADDED HERE
     if (request.user.Name !== request.params.name) {
       return response.status(400).send("Permission denied");
@@ -283,7 +310,9 @@ app.put(
     )
 
       .then((updatedUser) => {
-        response.json(updatedUser);
+        const updatedUserWithoutPassword = { ...updatedUser._doc };
+        delete updatedUserWithoutPassword.Password;
+        response.json(updatedUserWithoutPassword);
       })
 
       .catch((error) => {
