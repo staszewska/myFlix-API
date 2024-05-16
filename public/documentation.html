@@ -14,12 +14,13 @@
       application, providing users with access to information about different
       movies, directors, and genres. With this API, users can retrieve details
       about movies, add and remove movies from their list of favorites, update
-      their user information, and much more. Built using Node.js, Express,
-      MongoDB, and Mongoose, this RESTful API follows industry best practices
-      for authentication, authorization, data validation, and security. Whether
-      you're a frontend developer integrating the API into the client-side
-      application or a movie enthusiast exploring the vast world of cinema, this
-      documentation will guide you through utilizing the myFlix API effectively.
+      their user information, and much more. Users can also log in to access
+      personalized features, such as managing favorites and updating profiles.
+      Built using Node.js, Express, MongoDB, and Mongoose, this RESTful API
+      follows industry best practices for authentication, authorization, data
+      validation, and security. It's important to note that access to these
+      features requires obtaining a user token upon successful authentication,
+      ensuring secure access to user-specific functionalities.
     </p>
 
     <h2>API Endpoint Documentation</h2>
@@ -119,6 +120,32 @@ Example:
           >
         </td>
       </tr>
+      <tr>
+        <td>POST</td>
+        <td>/login</td>
+        <td>Authenticate a user</td>
+        <td>N/A</td>
+        <td>
+          Example:
+          <pre>
+          { "username": "example_username", "password": "example_password" }
+          JSON Format
+          </pre>
+        </td>
+        <td>
+          User object with JWT token in JSON format
+          <pre>
+          Example:
+          {
+            "user": {
+              // User details excluding password
+            },
+            "token": "JWT Token"
+          }
+          </pre>
+        </td>
+      </tr>
+
       <tr>
         <td>PUT</td>
         <td>/users/:name/movies/:movieID</td>
