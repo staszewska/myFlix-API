@@ -341,7 +341,9 @@ app.delete(
     )
 
       .then((updatedUser) => {
-        response.json(updatedUser);
+        const updatedUserWithoutPassword = { ...updatedUser._doc };
+        delete updatedUserWithoutPassword.Password;
+        response.json(updatedUserWithoutPassword);
       })
 
       .catch((error) => {
