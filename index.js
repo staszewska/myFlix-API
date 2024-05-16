@@ -302,9 +302,8 @@ app.put(
 
     await Users.findOneAndUpdate(
       { Name: request.params.name },
-
       {
-        $push: { favoriteMovies: request.params.movieID },
+        $addToSet: { favoriteMovies: request.params.movieID },
       },
       { new: true }
     )
